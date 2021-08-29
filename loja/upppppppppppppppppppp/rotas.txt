@@ -1,0 +1,35 @@
+from loja.produtos.models import Fornecedor
+from .forms import Addprodutos
+from flask import redirect, render_template, url_for, flash, request
+from .models import Fornecedor
+from loja import db, app
+
+
+@app.route('/addforn', methods=['GET', 'POST'])
+def addforn():
+    if request.method == "POST":
+        getforn_nome = request.form.get('forn_nome')
+        getforn_razao = request.form.get('forn_razaoSocial') #ESSE fornecedor vem da pagina html onde o input tem o campo fornecedor
+        getforn_endereco = request.form.get('forn_endereco')
+        getforn_cnpj = request.form.get('forn_cnpj')
+        getforn_ie= request.form.get('forn_ie')
+        getforn_telefone = request.form.get('forn_telefone')
+        forn = Fornecedor(forn_razaoSocial = getforn_razao, forn_nome = getforn_nome, forn_endereco = getforn_endereco, forn_cnpj = getforn_cnpj, forn_ie = getforn_ie, 
+        forn_telefone = getforn_telefone)
+        db.session.add(forn)
+
+        teste = getforn_razao
+      
+
+        flash(f'O fornecedor {getforn_nome} foi cadastrado com sucesso', 'success')
+        db.session.commit()
+        return redirect(url_for('addforn'))
+    return render_template('/produtos/addforn.html', forn='forn') 
+
+
+@app.route('/addproduto', methods=['GET', 'POST'])
+def addproduto():
+    fornecedor = Fornecedor.query.all()
+    form = Addprodutos(request.form)
+    return render_template('produtos/addproduto.html', title="Cadastrar Produtos", form = form, fornecedor = fornecedor)
+   

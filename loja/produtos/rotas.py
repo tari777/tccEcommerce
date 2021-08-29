@@ -1,24 +1,41 @@
+  
 from loja.produtos.models import Fornecedor
 from .forms import Addprodutos
 from flask import redirect, render_template, url_for, flash, request
-from .models import Fornecedor
+from .models import Fornecedor, Marcas
 from loja import db, app
 
 
-@app.route('/addforn', methods=['GET', 'POST'])
+
+
+@app.route('/addmarca', methods=['GET', 'POST'])   
+def addmarca():
+    if request.method == "POST":
+        getmarca = request.form.get('marca')
+        marca = Marcas(name=getmarca)
+        db.session.add(marca)
+        flash(f'A marca {getmarca} foi cadastrada com sucesso', 'success')
+        db.session.commit()
+        return redirect(url_for('addmarca'))
+    return render_template('/produtos/addmarca.html', marcas='marcas')
+
+
+@app.route('/addforn', methods=['GET', 'POST'])   
 def addforn():
     if request.method == "POST":
-        getforn = request.form.get('fornecedor') #ESSE fornecedor vem da pagina html onde o input tem o campo fornecedor
-        forn = Fornecedor(forn_razaoSocial = getforn)
+        getmarca = request.form.get('fornecedor')
+        forn = Fornecedor(name=getmarca)
         db.session.add(forn)
-        flash(f'O fornecedor {getforn} foi cadastrado com sucesso', 'success')
+        flash(f'O fornecedor {getmarca} foi cadastrada com sucesso', 'success')
         db.session.commit()
         return redirect(url_for('addforn'))
-    return render_template('/produtos/addforn.html', forn='forn') 
+    return render_template('/produtos/addmarca.html')
+
 
 
 @app.route('/addproduto', methods=['GET', 'POST'])
 def addproduto():
+    marcas = Marcas.query.all()
+    fornecedores = Fornecedor.query.all()
     form = Addprodutos(request.form)
-    return render_template('produtos/addproduto.html', title="Cadastrar Produtos", form = form)
-   
+    return render_template('produtos/addproduto.html', title="Cadastrar Produtos", form = form, marcas = marcas, fornecedores = fornecedores)

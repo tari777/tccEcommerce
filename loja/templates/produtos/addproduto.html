@@ -6,6 +6,7 @@
 {% include '_messages.html' %}
 
 <div class="container">
+    <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h2 class="text-center">Adicionar Produtos</h2>
@@ -16,6 +17,23 @@
             {{ render_field(form.price, class="form-control", placeholder="Preço do produto")}}
             {{ render_field(form.discount, class="form-control", placeholder="Desconto do produto")}}
             {{ render_field(form.stock, class="form-control", placeholder="Estoque do produto")}}
+
+            <label for="marca">Adicionar uma marca </label>
+            <select name="marca" id="marca" class="form-control" required>
+                <option value=""> Selecione uma marca </option>
+                {% for marca in marcas%}
+                <option value="marca.id">{{marca.name}}</option>
+                {% endfor %}
+            </select>
+
+
+            <label for="fornecedor">Adicionar um fornecedor </label>
+            <select name="fornecedor" id="fornecedor" class="form-control" required>
+                <option value=""> Selecione um fornecedor </option>
+                {% for fornecedor in fornecedores %}
+                <option value="{{fornecedor.id}}">{{fornecedor.name}}</option>
+                {% endfor %}
+            </select>
             {{ render_field(form.description, class="form-control", placeholder="Descrição do produto", rows="10")}}
 
             <div class="cointainer">
@@ -32,6 +50,7 @@
     </div>
     <div class="col-md-2"></div>
 
+</div>
 </div>
 
 {% endblock content%}
