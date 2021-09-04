@@ -1,0 +1,1 @@
+html .row deixa alihado, colocar no começo e fechar no final

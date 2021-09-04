@@ -24,7 +24,8 @@ def addmarca():
 def addforn():
     if request.method == "POST":
         getmarca = request.form.get('fornecedor')
-        forn = Fornecedor(name=getmarca)
+        getend = request.form.get('endereco')
+        forn = Fornecedor(name=getmarca, endereco = getend)
         db.session.add(forn)
         flash(f'O fornecedor {getmarca} foi cadastrada com sucesso', 'success')
         db.session.commit()
