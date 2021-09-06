@@ -22,7 +22,7 @@
             <select name="marca" id="marca" class="form-control" required>
                 <option value=""> Selecione uma marca </option>
                 {% for marca in marcas%}
-                <option value="marca.id">{{marca.name}}</option>
+                <option value="{{marca.id}}">{{marca.name}}</option>
                 {% endfor %}
             </select>
 

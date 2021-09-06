@@ -4,5 +4,71 @@
 {% block content %}
 
 {% include '_messages.html' %}
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Administrador</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+</div>
+<div class="container mt-3">
+    <table class="table table-sm table-stripe">
+        <thread>
+            <th>Serial</th>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Desconto</th>
+            <th>Fabricante</th>
+            <th>Foto</th>
+            <th>Editar</th>
+            <th>Deletar</th>  
+        </thread>
 
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{produto.name}}</td>
+                <td>{{produto.price}}</td>
+                <td>{{produto.discount}} %</td>
+                <td>{{produto.marca.name}}</td>
+                <td><img src="{{url_for('static', filename ='images/' + produto.image_1)}}" width="150" height="80"></td>
+                <td>Editar</td>
+                <td>Deletar</td>
+            </tr>
+            {% endfor %}
+             
+        </tbody>
+    </table>
+</div>
 {% endblock content %}
