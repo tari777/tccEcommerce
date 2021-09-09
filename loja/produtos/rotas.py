@@ -26,6 +26,38 @@ def addmarca():
     return render_template('/produtos/addmarca.html', marcas='marcas')
 
 
+
+@app.route('/updatemarca/<int:id>', methods=['GET', 'POST'])   
+def updatemarca(id):
+    if'email' not in session: #SE O EMAIL N EXISTE
+        flash(f'Favor fazer seu login primeiro', 'success')
+        flash('Logue no sistema primeiro', 'danger') 
+        return redirect(url_for('login')) #VAI PARA A TELA DE LOGIN
+    updatemarca = Marcas.query.get_or_404(id)
+    marca = request.form.get('marca')
+    if request.method=='POST':
+        updatemarca.name = marca
+        flash(f'Sua marca foi atualizada com sucesso', 'success')
+        db.session.commit()
+        return redirect(url_for('marcas'))
+    return render_template('/produtos/updatemarca.html', title='Atualizar Marca', updatemarca=updatemarca)
+
+
+@app.route('/updateforn/<int:id>', methods=['GET', 'POST'])   
+def updateforn(id):
+    if'email' not in session: #SE O EMAIL N EXISTE
+        flash(f'Favor fazer seu login primeiro', 'success')
+        flash('Logue no sistema primeiro', 'danger') 
+        return redirect(url_for('login')) #VAI PARA A TELA DE LOGIN
+    updateforn = Fornecedor.query.get_or_404(id)
+    fornecedor = request.form.get('fornecedor')
+    if request.method=='POST':
+        updateforn.name = fornecedor
+        flash(f'Seu Fabricante foi atualizada com sucesso', 'success')
+        db.session.commit()
+        return redirect(url_for('fornecedor'))
+    return render_template('/produtos/updatemarca.html', title='Atualizar Fornecedor', updateforn=updateforn)
+
 @app.route('/addforn', methods=['GET', 'POST'])   
 def addforn():
     if'email' not in session: #SE O EMAIL N EXISTE

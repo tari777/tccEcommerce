@@ -1,6 +1,6 @@
 from loja.admin.models import User
 from flask import render_template, session, request, redirect, url_for, flash
-from loja.produtos.models import Addproduto
+from loja.produtos.models import Addproduto, Marcas, Fornecedor
 from loja import app, db, bcrypt
 from .forms import RegistrationForm, LoginFormulario
 from .models import User
@@ -8,7 +8,7 @@ import os
 
  
 
-@app.route('/')
+@app.route('/admin')
 def admin():
     if'email' not in session: #SE O EMAIL N EXISTE
         flash(f'Favor fazer seu login primeiro', 'success')
@@ -17,7 +17,25 @@ def admin():
     produtos = Addproduto.query.all()
     return render_template ('admin/index.html', title="Pagina Administrativa", produtos=produtos)
 
+@app.route('/marcas')
+def marcas():
+    if'email' not in session: #SE O EMAIL N EXISTE
+        flash(f'Favor fazer seu login primeiro', 'success')
+        flash('Logue no sistema primeiro', 'danger') 
+        return redirect(url_for('login')) #VAI PARA A TELA DE LOGIN
+    marcas = Marcas.query.order_by(Marcas.id.desc()).all()
+    return render_template ('admin/marca.html', title="Pagina Marcas", marcas=marcas)
 
+@app.route('/fornecedor')
+def fornecedor():
+    if'email' not in session: #SE O EMAIL N EXISTE
+        flash(f'Favor fazer seu login primeiro', 'success')
+        flash('Logue no sistema primeiro', 'danger') 
+        return redirect(url_for('login')) #VAI PARA A TELA DE LOGIN
+    fornecedor = Fornecedor.query.order_by(Fornecedor.id.desc()).all()
+    return render_template ('admin/marca.html', title="Pagina Fornecedor", fornecedor=fornecedor)
+
+    
     
 @app.route('/registrar', methods=['GET', 'POST'])
 def registrar():

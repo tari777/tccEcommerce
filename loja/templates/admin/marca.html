@@ -6,7 +6,7 @@
 {% include '_messages.html' %}
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Administrador</a>
+        <a class="navbar-brand" href="/admin">Administrador</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,30 +48,37 @@
     <table class="table table-sm table-stripe">
         <thread>
             <th>Serial</th>
-            <th>Produto</th>
-            <th>Preço</th>
-            <th>Desconto</th>
-            <th>Fabricante</th>
-            <th>Foto</th>
+            <th>Nome</th>
+
             <th>Editar</th>
             <th>Deletar</th>  
         </thread>
 
         <tbody>
-            {% for produto in produtos %}
+            {% if marcas %}
+            {% for marca in marcas %}
             <tr>
                 <td>{{loop.index}}</td>
-                <td>{{produto.name}}</td>
-                <td>{{produto.price}}</td>
-                <td>{{produto.discount}} %</td>
-                <td>{{produto.marca.name}}</td>
-                <td><img src="{{url_for('static', filename ='images/' + produto.image_1)}}" width="150" height="80"></td>
-                <td>Editar</td>
-                <td>Deletar</td>
+                <td>{{marca.name}}</td>
+
+                <td><a href="{{url_for('updatemarca', id=marca.id)}}" class="btn btn-sm btn-outline-success">Editar</a></td>
+                <td><a href="" class="btn btn-sm btn-outline-warning">Deletar</a></td>>
             </tr>
             {% endfor %}
+            {% else %}
+            {% for fornecedor in fornecedor %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{fornecedor.name}}</td>
+
+                <td><a href="{{url_for('updateforn', id=fornecedor.id)}}" class="btn btn-sm btn-outline-success">Editar</a></td>
+                <td><a href="" class="btn btn-sm btn-outline-warning">Deletar</a></td>>
+            </tr>
+            {% endfor %}
+            {% endif %}
              
         </tbody>
+
     </table>
 </div>
 {% endblock content %}
