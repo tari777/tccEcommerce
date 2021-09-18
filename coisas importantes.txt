@@ -1,0 +1,10 @@
+no arquivo updatemarcas.html, tem uma parte da area de editar fornecedor onde é possivel adicionar outra linha, la
+adicionou automaticamente outra pro endereço, se eu quiser alterar é só ir la nas rotas e dar commit também
+
+
+
+{% for fornecedor in fornecedores %}
+
+Fornecedor = Eu que defino esse dentro do addproduto, essa vai ser a primeira vez que ele é criado, e vai servir pra coisas abaixo, como fornecedor.name
+
+fornecedores = é uma variavel que eu usei um query.all pra ver tudo que tem.

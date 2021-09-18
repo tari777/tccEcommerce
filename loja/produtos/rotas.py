@@ -1,10 +1,10 @@
   
 from loja.produtos.models import Fornecedor
 from .forms import Addprodutos
-from flask import redirect, render_template, url_for, flash, request, session
+from flask import redirect, render_template, url_for, flash, request, session, current_app
 from .models import Fornecedor, Marcas, Addproduto
 from loja import db, app, photos
-import secrets
+import secrets, os
 
 
 
@@ -41,6 +41,17 @@ def updatemarca(id):
         db.session.commit()
         return redirect(url_for('marcas'))
     return render_template('/produtos/updatemarca.html', title='Atualizar Marca', updatemarca=updatemarca)
+
+@app.route('/deletemarca/<int:id>', methods=['POST'])   
+def deletemarca(id):
+    marca = Marcas.query.get_or_404(id)
+    if request.method=='POST':
+        db.session.delete(marca)
+        db.session.commit()
+        flash(f'A marca {marca.name} foi excluida com sucesso', 'success')
+        return redirect(url_for('admin'))
+    flash(f'A marca {marca.name} não foi excluida"', 'warning')
+    return redirect(url_for('admin'))
 
 
 @app.route('/updateforn/<int:id>', methods=['GET', 'POST'])   
@@ -106,3 +117,61 @@ def addproduto():
         return redirect(url_for('admin'))
         
     return render_template('produtos/addproduto.html', title="Cadastrar Produtos", form = form, marcas = marcas, fornecedores = fornecedores)
+
+
+
+    
+@app.route('/updateproduto/<int:id>', methods=['GET', 'POST'])   
+def updateproduto(id):
+    marcas = Marcas.query.all()
+    fornecedores = Fornecedor.query.all()
+    produto = Addproduto.query.get_or_404(id)
+    marca = request.form.get('marca')
+    fornecedor = request.form.get('fornecedor')
+    form = Addprodutos(request.form)
+    if request.method == "POST":
+        produto.name = form.name.data
+        produto.price = form.price.data
+        produto.desc = form.description.data
+
+        produto.marca_id = marca
+        produto.fornecedor_id = fornecedor
+
+        produto.stock = form.stock.data
+        produto.discount = form.discount.data
+
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_1))
+                produto.image_1 = photos.save(request.files.get('image_1'), name= secrets.token_hex(10)+".")
+            except:
+                produto.image_1 = photos.save(request.files.get('image_1'), name= secrets.token_hex(10)+".")
+
+        if request.files.get('image_2'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_2))
+                produto.image_2 = photos.save(request.files.get('image_2'), name= secrets.token_hex(10)+".")
+            except:
+                produto.image_2 = photos.save(request.files.get('image_2'), name= secrets.token_hex(10)+".")
+
+        if request.files.get('image_3'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_3))
+                produto.image_3 = photos.save(request.files.get('image_3'), name= secrets.token_hex(10)+".")
+            except:
+                produto.image_3 = photos.save(request.files.get('image_3'), name= secrets.token_hex(10)+".")
+
+        db.session.commit()
+        flash(f'O produto foi atualizado com sucesso', 'success')
+        return redirect(url_for('admin'))
+
+    form.name.data = produto.name
+    form.price.data = produto.price
+    form.description.data = produto.desc
+    form.stock.data = produto.stock
+    form.discount.data = produto.discount
+
+    
+
+
+    return render_template('/produtos/updateproduto.html', title='Atualizar Produtos', form=form, marcas=marcas, fornecedores=fornecedores, produto=produto)
