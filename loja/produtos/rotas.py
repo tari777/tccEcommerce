@@ -54,6 +54,36 @@ def deletemarca(id):
     return redirect(url_for('admin'))
 
 
+@app.route('/deleteforn/<int:id>', methods=['POST'])   
+def deleteforn(id):
+    fornecedor = Fornecedor.query.get_or_404(id)
+    if request.method=='POST':
+        db.session.delete(fornecedor)
+        db.session.commit() 
+        flash(f'A marca {fornecedor.name} foi excluida com sucesso', 'success')
+        return redirect(url_for('admin'))
+    flash(f'A marca {fornecedor.name} não foi excluida"', 'warning')
+    return redirect(url_for('admin'))
+
+@app.route('/deleteproduto/<int:id>', methods=['POST'])   
+def deleteproduto(id):
+    produto = Addproduto.query.get_or_404(id)
+    if request.method=='POST':
+         if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_1))
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_2))
+                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_3))
+            except Exception as e:
+                print(e)
+         
+         db.session.delete(produto)
+         db.session.commit()
+         return redirect(url_for('admin'))
+    flash(f'Produto {produto.name} foi cadastrado com sucesso', 'success')
+
+    return redirect(url_for('admin'))
+
 @app.route('/updateforn/<int:id>', methods=['GET', 'POST'])   
 def updateforn(id):
     if'email' not in session: #SE O EMAIL N EXISTE

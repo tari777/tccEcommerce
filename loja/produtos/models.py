@@ -2,7 +2,7 @@ from loja import db
 from datetime import datetime
 
 class Addproduto(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10,2), nullable=False)
     discount = db.Column(db.Integer, default=0)
@@ -26,12 +26,12 @@ class Addproduto(db.Model):
 
 
 class Fornecedor(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     endereco = db.Column(db.String(50), nullable=False, unique=True)
 
 class Marcas(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     name = db.Column(db.String(50), nullable=False, unique=True)
 
 db.create_all()

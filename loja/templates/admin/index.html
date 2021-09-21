@@ -6,7 +6,7 @@
 {% include '_messages.html' %}
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Administrador</a>
+        <a class="navbar-brand" href="/">Administrador</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -14,23 +14,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/admin">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/marcas">Marcas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/fornecedor">Fornecedores</a>
+                <a class="nav-link" href="{{url_for('fornecedor')}}">Fornecedores</a>
               </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
+                Adicionar
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="{{url_for('addproduto')}}">Produto</a>
+                <a class="dropdown-item" href="{{url_for('addmarca')}}">Marca</a>
+                <a class="dropdown-item" href="{{url_for('addforn')}}">Fornecedor</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">Outro</a>
               </div>
             </li>
             <li class="nav-item">
@@ -44,6 +45,9 @@
         </div>
       </nav>
 </div>
+
+
+
 <div class="container mt-3">
     <table class="table table-sm table-stripe">
         <thread>
@@ -67,8 +71,36 @@
                 <td>{{produto.marca.name}}</td>
                 <td><img src="{{url_for('static', filename ='images/' + produto.image_1)}}" width="150" height="80"></td>
                 <td><a href="{{url_for('updateproduto', id=produto.id)}}" class = "btn btn-success btn-sm">Editar</a></td>
-                <td>Deletar</td>
+                <td>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal--{{produto.id}}">
+                    Deletar
+                  </button>
+                </td>
             </tr>
+
+<div class="modal fade" id="exampleModal--{{produto.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{produto.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class= "text-danger"> Você deseja excluir esta marca? {{produto.name}} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Cancelar</button>
+ 
+        <form action="{{url_for('deleteproduto', id=produto.id)}}" method="POST">
+          <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
             {% endfor %}
              
         </tbody>
