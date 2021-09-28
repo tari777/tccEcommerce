@@ -9,6 +9,19 @@ import secrets, os
 
 
 
+@app.route('/')
+def home():
+    produtos = Addproduto.query.filter(Addproduto.stock > 0)
+    marcas = Marcas.query.all()
+    return render_template('produtos/index.html', produtos = produtos, marcas = marcas)
+    return "PAGINA HOME"
+
+
+@app.route('/marca/<int:id>') 
+def get_marca(id):
+    marca = Addproduto.query.filter_by(marca_id = id)
+    return render_template('/produtos/index.html', marca=marca)
+
 @app.route('/addmarca', methods=['GET', 'POST'])   
 def addmarca():
     if'email' not in session: #SE O EMAIL N EXISTE
@@ -71,9 +84,9 @@ def deleteproduto(id):
     if request.method=='POST':
          if request.files.get('image_1'):
             try:
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_1))
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_2))
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_3))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_1))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_2))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_3))
             except Exception as e:
                 print(e)
          
@@ -172,21 +185,21 @@ def updateproduto(id):
 
         if request.files.get('image_1'):
             try:
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_1))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_1))
                 produto.image_1 = photos.save(request.files.get('image_1'), name= secrets.token_hex(10)+".")
             except:
                 produto.image_1 = photos.save(request.files.get('image_1'), name= secrets.token_hex(10)+".")
 
         if request.files.get('image_2'):
             try:
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_2))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_2))
                 produto.image_2 = photos.save(request.files.get('image_2'), name= secrets.token_hex(10)+".")
             except:
                 produto.image_2 = photos.save(request.files.get('image_2'), name= secrets.token_hex(10)+".")
 
         if request.files.get('image_3'):
             try:
-                os.unlink(os.path.join(current_app.root_path, "'static/images"+produto.image_3))
+                os.unlink(os.path.join(current_app.root_path, "static/images/"+produto.image_3))
                 produto.image_3 = photos.save(request.files.get('image_3'), name= secrets.token_hex(10)+".")
             except:
                 produto.image_3 = photos.save(request.files.get('image_3'), name= secrets.token_hex(10)+".")

@@ -8,7 +8,8 @@ import os
 
  
 
-@app.route('/')
+
+@app.route('/admin')
 def admin():
     if'email' not in session: #SE O EMAIL N EXISTE
         flash(f'Favor fazer seu login primeiro', 'success')
