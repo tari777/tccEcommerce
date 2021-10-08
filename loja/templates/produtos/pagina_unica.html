@@ -57,7 +57,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6" id="m_image">
-            <image src="{{url_for('static', filename='images/'+ produto.image_1)}}" alt="{{produto.name}}" height="400">
+            <image src="{{url_for('static', filename='images/'+ produto.image_1)}}" alt="{{produto.name}}" height="400" width="400">
         </div>
    
 
@@ -70,20 +70,42 @@
             <b> Desconto do Produto: {{produto.discount}} %</b>
 
             {% endif %}
-            <br>
-            <br>
+            <hr>
+            
             <b> Descrição do Produto</b> 
             <p> {{produto.desc}}</p>
+            <hr>
+            <form action="{{url_for('AddCart')}}" method="POST">
+              <input type="hidden" name="produto_id" value="{{produto.id}}">
+              <button type="submit" class="btn btn-sm btn-warning">Adicionar Carrinho</button>
+              <label for=""> Quantidade:</label>
+              <input type="number" name="quantity" id="" value="1" min="1" max="{{produto.stock}}">  
+            </form>
             
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <image src="{{url_for('static', filename='images/'+ produto.image_1)}}" alt="{{produto.name}}" height="150" height="150">
-            <image src="{{url_for('static', filename='images/'+ produto.image_2)}}" alt="{{produto.name}}" height="150" height="150">
-            <image src="{{url_for('static', filename='images/'+ produto.image_3)}}" alt="{{produto.name}}" height="150" height="150">
+        <div class="col-md-12 mt-3" id="s_image">
+            <hr>
+            <image src="{{url_for('static', filename='images/'+ produto.image_1)}}" alt="{{produto.name}}" width="150" height="150" class="p-3">
+            <image src="{{url_for('static', filename='images/'+ produto.image_2)}}" alt="{{produto.name}}" width="150" height="150" class="p-3">
+            <image src="{{url_for('static', filename='images/'+ produto.image_3)}}" alt="{{produto.name}}" width="150" height="150" class="p-3">
                 
         </div>
     </div>
 </div>
+
+<script>
+  var m_image = document.getElementById('m_image');
+  var s_image = document.getElementById('s_image').getElementsByTagName('img');
+
+  for (var i = 0; i < s_image.length;i++) {
+    s_image[i].addEventListener('click', full_image);
+  }
+
+  function full_image (){
+    var ImageSRC = this.getAttribute('src');
+    m_image.innerHTML = "<img src=" + ImageSRC + " width='400' height='400'>";
+  }
+</script>
 {% endblock content %}

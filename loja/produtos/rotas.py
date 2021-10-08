@@ -31,7 +31,9 @@ def get_marca(id):
 @app.route('/produto/<int:id>') 
 def pagina_unica(id):
     produto = Addproduto.query.get_or_404(id)
-    return render_template('/produtos/pagina_unica.html', produto = produto)
+    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
+    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
+    return render_template('/produtos/pagina_unica.html', produto = produto, marcas=marcas, fornecedores=fornecedores )
 
 @app.route('/fornecedor/<int:id>') 
 def get_fornecedor(id):
