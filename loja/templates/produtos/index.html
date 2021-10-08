@@ -41,7 +41,7 @@
 
 
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
+          <a class="nav-link disabled" href="#" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -67,8 +67,13 @@
                   <p class="text-center">Preço R${{m.price}}</p>
                 </div>
                 <div class="card-footer">
-                    <a href="{{url_for('pagina_unica', id=m.id)}}" class="float-left btn btn-sm btn-success">Detalhes Marca</a>
-                    <a href='#' class="float-right btn btn-sm btn-warning">Comprar</a>
+                    <a href="{{url_for('pagina_unica', id=m.id)}}" class="float-left btn btn-sm btn-success">Detalhes</a>
+                    
+                <form action="{{url_for('AddCart')}}" method="POST">
+                  <input type="hidden" name="produto_id" value="{{m.id}}">
+                  <button type="submit" class="btn btn-sm btn-warning float-right">Adicionar Carrinho</button>
+                  <input type="hidden" name="quantity" id="" value="1">  
+                </form>  
                         
                 </div>
             </div>
@@ -121,8 +126,13 @@
               <p class="text-center">Preço R${{get_forn.price}}</p>
             </div>
             <div class="card-footer">
-                <a href="{{url_for('pagina_unica', id=get_forn.id)}}" class="float-left btn btn-sm btn-success">Detalhes Marca</a>
-                <a href='#' class="float-right btn btn-sm btn-warning">Comprar</a>
+                <a href="{{url_for('pagina_unica', id=get_forn.id)}}" class="float-left btn btn-sm btn-success">Detalhes</a>
+
+                <form action="{{url_for('AddCart')}}" method="POST">
+                  <input type="hidden" name="produto_id" value="{{get_forn.id}}">
+                  <button type="submit" class="btn btn-sm btn-warning float-right">Adicionar Carrinho</button>
+                  <input type="hidden" name="quantity" id="" value="1">  
+                </form>  
                     
             </div>
         </div>
@@ -173,8 +183,12 @@
                   <p class="text-center">Preço R${{produto.price}}</p>
                 </div>
                 <div class="card-footer">
-                    <a href="{{url_for('pagina_unica', id=produto.id)}}" class="float-left btn btn-sm btn-success">Detalhes Produto</a>
-                    <a href='#' class="float-right btn btn-sm btn-warning">Comprar</a>      
+                    <a href="{{url_for('pagina_unica', id=produto.id)}}" class="float-left btn btn-sm btn-success">Detalhes</a>
+                    <form action="{{url_for('AddCart')}}" method="POST">
+                      <input type="hidden" name="produto_id" value="{{produto.id}}">
+                      <button type="submit" class="btn btn-sm btn-warning float-right">Adicionar Carrinho</button>
+                      <input type="hidden" name="quantity" id="" value="1" min="1" max="{{produto.stock}}">  
+                    </form>   
                 </div>
             </div>
         </div>
