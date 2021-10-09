@@ -26,6 +26,7 @@ def AddCart():
                     print("Este produto já foi adicionado ao carrinho!")
                 else:
                     session['LojainCarrinho'] = M_Dicionarios(session['LojainCarrinho'],DicItems)
+
                     return redirect(request.referrer)
             else:
                session['LojainCarrinho'] = DicItems
@@ -35,3 +36,17 @@ def AddCart():
         print(e)
     finally:
         return redirect(request.referrer)
+
+@app.route('/carros')
+def getCart():
+    if 'LojainCarrinho' not in session:
+        return redirect(request.referrer)
+    subtotal = 0
+    valorpagar = 0
+    for key, produto in session['LojainCarrinho'].items():
+        discount = (produto['discount'] / 100) * float(produto['price'])
+        subtotal += float(produto['price']) * int(produto['quantity'])
+        subtotal -= discount
+        imposto = ("%.2f"%(.06 *float(subtotal)))
+        valorpagar = float("%.2f" %(1.06 * subtotal))
+    return render_template('produtos/carros.html', imposto = imposto, valorpagar = valorpagar)

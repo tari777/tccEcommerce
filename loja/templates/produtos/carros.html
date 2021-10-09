@@ -1,0 +1,53 @@
+{% extends 'layouts.html' %} 
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table tabke-sm">
+            <thead>
+                <th> Código </th>
+                <th> Nome </th>
+                <th> Preço </th>
+                <th> Quantidade </th>
+                <th> Desconto </th>
+                <th> SubTotal </th>
+                <th> Atualizar </th>
+                <th> Excluir </th>
+            </thead>
+            <tbody>
+                {% for key , produto in session['LojainCarrinho'].items() %}
+                {% set discount = "%0.2f" | format((produto.discount/100) * produto.price|float) %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{produto.name}}</td>
+                    <td>R${{produto.price}}</td>
+                    <td>{{produto.quantity}}</td>
+                    {% if produto.discount > 0 %}
+                    <td>{{produto.discount}}% &nbsp; = {{discount}}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% set subtotal = produto.quantity|int * produto.price|float %}
+                    <td>R${{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
+                    
+                    <td><a href="#"> Atualizar </a></td>
+                    <td><a href="#"> Excluir </a></td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td></td>
+                    <td><a href="/">Voltar</a></td>
+                    <td colspan="3">Imposto:&nbsp; R${{imposto}}</td>
+                    <td colspan="5">Valor Pagar:&nbsp; R${{valorpagar}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
