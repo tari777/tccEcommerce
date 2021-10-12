@@ -7,16 +7,30 @@ from loja import db, app, photos
 import secrets, os
 
 
+def marcas():
+    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
+    return marcas
 
+def fornecedores():
+    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
+    return fornecedores
 
 @app.route('/')
 def home():
     pagina = request.args.get('pagina', 1, type=int)
     produtos = Addproduto.query.filter(Addproduto.stock > 0).order_by(Addproduto.id.desc()).paginate(page=pagina,per_page=4)
-    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
-    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
-    return render_template('produtos/index.html', produtos = produtos, marcas = marcas, fornecedores=fornecedores)
+    return render_template('produtos/index.html', produtos = produtos, marcas = marcas(), fornecedores=fornecedores())
 
+@app.route('/search', methods=['GET', 'POST']) 
+def search():
+    if request.method == 'POST':
+        form = request.form
+        search_value = form['search_string']
+        search = "%{0}%".format(search_value)
+        produtos = Addproduto.query.filter(Addproduto.name.like(search)).all()
+        return render_template('pesquisar.html', produtos = produtos, marcas = marcas(), fornecedores=fornecedores())
+    else:
+        return redirect('/')
 
 
 @app.route('/marca/<int:id>') 
@@ -24,25 +38,19 @@ def get_marca(id):
     get_m = Marcas.query.filter_by(id = id).first_or_404()
     pagina = request.args.get('pagina', 1, type=int)
     marca = Addproduto.query.filter_by(marca = get_m).paginate(page=pagina,per_page=4)
-    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
-    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
-    return render_template('/produtos/index.html', marca=marca, marcas=marcas, fornecedores=fornecedores, get_m = get_m)
+    return render_template('/produtos/index.html', marca=marca, marcas=marcas(), fornecedores=fornecedores(), get_m = get_m)
 
 @app.route('/produto/<int:id>') 
 def pagina_unica(id):
     produto = Addproduto.query.get_or_404(id)
-    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
-    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
-    return render_template('/produtos/pagina_unica.html', produto = produto, marcas=marcas, fornecedores=fornecedores )
+    return render_template('/produtos/pagina_unica.html', produto = produto, marcas=marcas(), fornecedores=fornecedores())
 
 @app.route('/fornecedor/<int:id>') 
 def get_fornecedor(id):
     pagina = request.args.get('pagina', 1, type=int)
     get_forn = Fornecedor.query.filter_by(id = id).first_or_404()
     get_forn_prod = Addproduto.query.filter_by(fornecedor = get_forn).paginate(page=pagina,per_page=4)
-    marcas = Marcas.query.join(Addproduto, (Marcas.id==Addproduto.marca_id)).all()
-    fornecedores = Fornecedor.query.join(Addproduto, (Fornecedor.id==Addproduto.fornecedor_id)).all()
-    return render_template('/produtos/index.html', get_forn_prod=get_forn_prod, fornecedores=fornecedores, marcas=marcas, get_forn = get_forn)
+    return render_template('/produtos/index.html', get_forn_prod=get_forn_prod, fornecedores=fornecedores(), marcas=marcas(), get_forn = get_forn)
 
 @app.route('/addmarca', methods=['GET', 'POST'])   
 def addmarca():
