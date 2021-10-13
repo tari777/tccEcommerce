@@ -20,7 +20,7 @@ app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir,'static/images')
 
 migrate = Migrate(app, db)
 with app.app_context():
-    if db.engine.url.drivernamev=="sqlite":
+    if db.engine.url.drivername=="sqlite":
         migrate.init_app(app, db, render_as_batch=True)
     else:
         migrate.init_app(app, db)

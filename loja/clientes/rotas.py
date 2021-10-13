@@ -2,7 +2,7 @@ from .forms import CadastroClienteForm, ClienteLoginForm
 from flask import redirect, render_template, url_for, flash, request, session, current_app
 from loja import db, app, photos, bcrypt, login_manager
 import secrets, os
-from .model import Cadastrar
+from .model import Cadastrar, ClientePedido
 from flask_login import login_required, current_user, login_user, logout_user
 
 
@@ -43,3 +43,42 @@ def clienteLogin():
 def cliente_logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/pedido_order')
+@login_required
+def pedido_order():
+    if current_user.is_authenticated: 
+        cliente_id = current_user.id
+        notafiscal = secrets.token_hex(5)
+        try:
+            p_order = ClientePedido(notafiscal = notafiscal, cliente_id = cliente_id, pedido = session['LojainCarrinho'])
+            db.session.add(p_order)
+            db.session.commit()
+            session.pop('LojainCarrinho')
+            flash('Seu pedido foi realizado com sucesso', 'success')
+            return redirect(url_for('home'))
+            
+        except Exception as e:
+            print(e)
+            flash('Não foi possível processar seu pedido!', 'danger')
+            return redirect(url_for('getCart'))
+
+@app.route('/pedidos/<notafiscal>')
+@login_required
+def pedidos(notafiscal):
+    if current_user.is_authenticated: 
+        gTotal = 0
+        subTotal = 0
+        cliente_id = current_user.id
+        cliente = Cadastrar.query.filter_by(id = cliente_id).first()
+        pedidos = ClientePedido.query.filter_by(cliente_id = cliente_id, notafiscal = notafiscal).order_by(ClientePedido.id.desc()).first()
+        for _key , produto in pedidos.pedido.items():    
+            disconto = (produto['discount']/100) * float(produto['price'])
+            subTotal += float(produto['price']) * int(produto['quantity'])
+            subTotal -= disconto
+            imposto = ("%.2f" % (.06* float(subTotal)))
+            gTotal = ("%.2f" % (1.06 * subTotal))
+    else:
+        return redirect(url_for('clienteLogin'))
+    return render_template('cliente/pedido.html', notafiscal = notafiscal, imposto = imposto, subTotal = subTotal, gTotal = gTotal, cliente = cliente, pedidos = pedidos)
