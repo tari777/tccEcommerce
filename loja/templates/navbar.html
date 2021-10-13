@@ -34,6 +34,27 @@
                 {% endfor %}
               </div>
             </li>
+
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('cliente_logout')}}">{{current_user.name}}</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('cliente_logout')}}">Sair</a>
+            </li>
+
+            {% else %}
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('cadastrar_clientes')}}">Cadastrar</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('clienteLogin')}}">Login</a>
+            </li>
+
+            {% endif %}
     
     
             <li class="nav-item">

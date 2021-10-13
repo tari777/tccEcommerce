@@ -2,3 +2,5 @@ https://www.youtube.com/watch?v=4FtjAE371XU&list=PL2Dw5PtrD32zLtw5icTfAUe_J8XSL0
 assistir esse de cima agora
 
 
+flask-login
+pip install Flask-Migrate
