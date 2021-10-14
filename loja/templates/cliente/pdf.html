@@ -1,14 +1,22 @@
-{% extends 'layouts.html' %} 
+<!doctype html>
+<html lang="en">
+  <head>
 
-{% block content %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% include 'navbar.html' %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Gerar PDF</title>
+  </head>
+  <body>
 
 <div class="container mt-4">
     
     <div class="row">
         <div class="col-md-12">
-            Número do Pedido: {{pedidos.notafiscal}}
+            <b style = "float:right;">Número do Pedido: {{pedidos.notafiscal}}</b>
             <br>
             Status do Pedido: {{pedidos.status}}
             <br>
@@ -58,22 +66,13 @@
 
                 <tr>
                     <td></td>
-                    <td><a href="{{url_for('pedido_order')}}" class="btn btn-success btn-sm float-left">Finalizar Compra</a></td>
+                
                     <td colspan="3">Imposto:&nbsp; R${{imposto}}</td>
                     <td colspan="5">Valor Pagar:&nbsp; R${{gTotal}}</td>
-                    <td>
-                        <form action="{{url_for('get_pdf', notafiscal=pedidos.notafiscal)}}" method = "post">
-                            <button type="submit" class="btn btn-warning btn-sm float-right">Gerar PDF</button>
-
-                        </form>
-                        
-
-
-                    </td>
+                   
                 </tr>
             
             </table>
     </div>
   </div>
 </div>
-{% endblock content %}

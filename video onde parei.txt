@@ -3,4 +3,6 @@ assistir esse de cima agora
 
 
 flask-login
+https://wkhtmltopdf.org/downloads.html
 pip install Flask-Migrate
+pip install pdfkit

@@ -1,9 +1,10 @@
 from .forms import CadastroClienteForm, ClienteLoginForm
-from flask import redirect, render_template, url_for, flash, request, session, current_app
+from flask import redirect, render_template, url_for, flash, request, session, current_app, make_response
 from loja import db, app, photos, bcrypt, login_manager
 import secrets, os
 from .model import Cadastrar, ClientePedido
 from flask_login import login_required, current_user, login_user, logout_user
+import pdfkit
 
 
 
@@ -57,7 +58,7 @@ def pedido_order():
             db.session.commit()
             session.pop('LojainCarrinho')
             flash('Seu pedido foi realizado com sucesso', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('pedidos', notafiscal = notafiscal))
             
         except Exception as e:
             print(e)
@@ -82,3 +83,28 @@ def pedidos(notafiscal):
     else:
         return redirect(url_for('clienteLogin'))
     return render_template('cliente/pedido.html', notafiscal = notafiscal, imposto = imposto, subTotal = subTotal, gTotal = gTotal, cliente = cliente, pedidos = pedidos)
+
+
+@app.route('/get_pdf/<notafiscal>', methods = ['POST'])
+@login_required
+def get_pdf(notafiscal):
+    if current_user.is_authenticated: 
+        gTotal = 0
+        subTotal = 0
+        cliente_id = current_user.id
+        if request.method=="POST":
+            cliente = Cadastrar.query.filter_by(id = cliente_id).first()
+            pedidos = ClientePedido.query.filter_by(cliente_id = cliente_id, notafiscal = notafiscal).order_by(ClientePedido.id.desc()).first()
+            for _key , produto in pedidos.pedido.items():    
+                disconto = (produto['discount']/100) * float(produto['price'])
+                subTotal += float(produto['price']) * int(produto['quantity'])
+                subTotal -= disconto
+                imposto = ("%.2f" % (.06* float(subTotal)))
+                gTotal = ("%.2f" % (1.06 * subTotal))
+            rendered = render_template('cliente/pdf.html', notafiscal = notafiscal, imposto = imposto, subTotal = subTotal, gTotal = gTotal, cliente = cliente, pedidos = pedidos)
+            pdf = pdfkit.from_string(rendered, False)
+            response = make_response(pdf)
+            response.headers['content-Type'] = 'application/pdf'
+            response.headers['content-Disposition'] = 'attched;filename='+notafiscal+'.pdf'
+            return response
+    return redirect(url_for('pedidos'))
