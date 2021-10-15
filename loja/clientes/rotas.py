@@ -5,8 +5,36 @@ import secrets, os
 from .model import Cadastrar, ClientePedido
 from flask_login import login_required, current_user, login_user, logout_user
 import pdfkit
+import stripe
 
+publishtable_key = 'pk_test_51JkhNsJNRIMOxPTeepB3tQZHLsV3IIVueEAjLixx7OaGiUBH5C0FUF6af8I6YNmS8Q3sBNLSylkIf5YOLZ6ebKXO00j0WJjdoc'
+stripe.api_key = 'sk_test_51JkhNsJNRIMOxPTetlMs81PJADVxZBw2zcbz76Vc1D1DJiLMlCK9zmUtiib0LUm5J5ocMqiLXxbkmZcA0ZFXgWJc00AybpckOR'
 
+@app.route('/pagamento', methods=['POST']) 
+@login_required
+def pagamento():
+    notafiscal = request.form.get('invoice')
+    amount = request.form.get('amount')
+
+    customer = stripe.Customer.create(
+        email=request.form['stripeEmail'],
+        source=request.form['stripeToken'],
+        )
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        description='TCC LOJA',
+        amount=amount,
+        currency='brl',
+        )
+    cliente_pedido = ClientePedido.query.filter_by(cliente_id = current_user.id, notafiscal = notafiscal).order_by(ClientePedido.id.desc()).first()
+    cliente_pedido.status='Pago'
+    db.session.commit()
+    return redirect(url_for('obrigado'))
+
+@app.route('/obrigado') 
+def obrigado():
+    return render_template('cliente/obrigado.html')
 
 @app.route('/cliente/cadastrar', methods=['GET', 'POST']) 
 def cadastrar_clientes():
@@ -18,7 +46,7 @@ def cadastrar_clientes():
         db.session.add(cadastrar)
         flash(f'Obrigado {form.name.data} por se cadastrar', 'success')
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('clienteLogin'))
     return render_template('cliente/cliente.html', form = form)
 
 
@@ -46,18 +74,25 @@ def cliente_logout():
     return redirect(url_for('home'))
 
 
+def atualizarlojaCarro():
+    for _key, produto in session['LojainCarrinho'].items():
+        session.modified = True
+        
+    return atualizarlojaCarro
+
+
 @app.route('/pedido_order')
 @login_required
 def pedido_order():
     if current_user.is_authenticated: 
         cliente_id = current_user.id
         notafiscal = secrets.token_hex(5)
+        atualizarlojaCarro()
         try:
             p_order = ClientePedido(notafiscal = notafiscal, cliente_id = cliente_id, pedido = session['LojainCarrinho'])
             db.session.add(p_order)
             db.session.commit()
             session.pop('LojainCarrinho')
-            flash('Seu pedido foi realizado com sucesso', 'success')
             return redirect(url_for('pedidos', notafiscal = notafiscal))
             
         except Exception as e:

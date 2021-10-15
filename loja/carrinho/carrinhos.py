@@ -69,7 +69,7 @@ def updateCarro(code):
             for key, item in session['LojainCarrinho'].items():
                 if int(key) == code:
                     item['quantity'] = quantity
-                    flash('Produto atualizado com sucesso!')
+                    flash('Produto atualizado com sucesso!', 'success')
                     return redirect(url_for('getCart'))
         except Exception as e:
             print(e)
@@ -85,7 +85,7 @@ def deleteitem(id):
         for key, item in session['LojainCarrinho'].items():
             if int(key) == id:
                 session['LojainCarrinho'].pop(key,None)
-                flash('Produto atualizado com sucesso!')
+                flash('Produto atualizado com sucesso!', 'success')
                 return redirect(url_for('getCart'))
     except Exception as e:
         print(e)

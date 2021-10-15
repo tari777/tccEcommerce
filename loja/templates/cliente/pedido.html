@@ -58,7 +58,25 @@
 
                 <tr>
                     <td></td>
-                    <td><a href="{{url_for('pedido_order')}}" class="btn btn-success btn-sm float-left">Finalizar Compra</a></td>
+                    <td>
+                        {% if pedidos.status == 'Pago' %}
+                        {% else %}
+                        <form action="{{url_for('pagamento')}}" method="POST">
+                            {% set amount = gTotal.replace('.','') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{pedidos.notafiscal}}">
+                            <script
+                              src="https://checkout.stripe.com/checkout.js"
+                              class="stripe-button"
+                              data-key="pk_test_51JkhNsJNRIMOxPTeepB3tQZHLsV3IIVueEAjLixx7OaGiUBH5C0FUF6af8I6YNmS8Q3sBNLSylkIf5YOLZ6ebKXO00j0WJjdoc"
+                              data-name="TCC FLASK"
+                              data-description="Pagamento Seguro"
+                              data-amount= "{{amount}}"
+                              data-currency="brl">
+                            </script>
+                          </form>
+                          {% endif %}
+                    </td>
                     <td colspan="3">Imposto:&nbsp; R${{imposto}}</td>
                     <td colspan="5">Valor Pagar:&nbsp; R${{gTotal}}</td>
                     <td>

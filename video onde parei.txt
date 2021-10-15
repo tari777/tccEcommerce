@@ -6,3 +6,4 @@ flask-login
 https://wkhtmltopdf.org/downloads.html
 pip install Flask-Migrate
 pip install pdfkit
+pip install stripe
