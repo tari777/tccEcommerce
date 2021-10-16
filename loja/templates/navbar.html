@@ -35,6 +35,18 @@
               </div>
             </li>
 
+            
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('meuspedidos')}}">Pedidos</a>
+            </li>
+
+            
+    
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a>
+            </li>
+
             {% if current_user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{{url_for('cliente_logout')}}">{{current_user.name}}</a>
@@ -55,11 +67,6 @@
             </li>
 
             {% endif %}
-    
-    
-            <li class="nav-item">
-              <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a>
-            </li>
           </ul>
           <form class="form-inline my-2 my-lg-0" method="POST">
             <input class="form-control mr-sm-2" type="text" placeholder="Pesquisar Produto" autofocus="autofocus" name="search_string">

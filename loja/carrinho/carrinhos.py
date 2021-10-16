@@ -1,7 +1,9 @@
 from flask import redirect, render_template, url_for, flash, request, session, current_app
 from loja import db, app
 from loja.produtos.models import Addproduto
+from loja.clientes.model import ClientePedido
 from loja.produtos.rotas import marcas, fornecedores
+from flask_login import login_required, current_user, login_user, logout_user
 import json
 
 
@@ -56,6 +58,14 @@ def getCart():
         imposto = ("%.2f"%(.06 *float(subtotal)))
         valorpagar = float("%.2f" %(1.06 * subtotal))
     return render_template('produtos/carros.html', imposto = imposto, valorpagar = valorpagar, marcas = marcas(), fornecedores = fornecedores())
+
+@app.route('/meuspedidos')
+@login_required
+def meuspedidos():
+    lista_pedidos = ClientePedido.query.filter_by(cliente_id = current_user.id)
+
+    return render_template('cliente/meuspedidos.html', lista_pedidos = lista_pedidos, marcas = marcas(), fornecedores = fornecedores())
+
 
 
 @app.route('/updateCarro/<int:code>', methods=['POST'])

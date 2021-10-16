@@ -6,6 +6,7 @@ from .model import Cadastrar, ClientePedido
 from flask_login import login_required, current_user, login_user, logout_user
 import pdfkit
 import stripe
+from loja.produtos.rotas import marcas, fornecedores
 
 publishtable_key = 'pk_test_51JkhNsJNRIMOxPTeepB3tQZHLsV3IIVueEAjLixx7OaGiUBH5C0FUF6af8I6YNmS8Q3sBNLSylkIf5YOLZ6ebKXO00j0WJjdoc'
 stripe.api_key = 'sk_test_51JkhNsJNRIMOxPTetlMs81PJADVxZBw2zcbz76Vc1D1DJiLMlCK9zmUtiib0LUm5J5ocMqiLXxbkmZcA0ZFXgWJc00AybpckOR'
@@ -93,7 +94,7 @@ def pedido_order():
             db.session.add(p_order)
             db.session.commit()
             session.pop('LojainCarrinho')
-            return redirect(url_for('pedidos', notafiscal = notafiscal))
+            return redirect(url_for('pedidos', notafiscal = notafiscal, marcas = marcas(), fornecedores = fornecedores()))
             
         except Exception as e:
             print(e)
@@ -117,7 +118,7 @@ def pedidos(notafiscal):
             gTotal = ("%.2f" % (1.06 * subTotal))
     else:
         return redirect(url_for('clienteLogin'))
-    return render_template('cliente/pedido.html', notafiscal = notafiscal, imposto = imposto, subTotal = subTotal, gTotal = gTotal, cliente = cliente, pedidos = pedidos)
+    return render_template('cliente/pedido.html', notafiscal = notafiscal, imposto = imposto, subTotal = subTotal, gTotal = gTotal, cliente = cliente, pedidos = pedidos, marcas = marcas(), fornecedores = fornecedores())
 
 
 @app.route('/get_pdf/<notafiscal>', methods = ['POST'])

@@ -1,0 +1,43 @@
+{% extends 'layouts.html' %} 
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table tabke-sm">
+            <thead>
+                <th> ID </th>
+                <th> notafiscal </th>
+                <th> status </th>
+                <th> Cliente_id </th>
+                <th> Visualizar </th>
+
+            </thead>
+            <tbody>
+                {% for pedido in lista_pedidos %}
+                <tr>
+                    <td>{{pedido.id}}</td>
+                    <td>{{pedido.notafiscal}}</td>
+                    <td>{{pedido.status}}</td>      
+                    <td>{{pedido.cliente_id}}</td>   
+                    <td><a href="pedidos/{{pedido.notafiscal}}" class="btn btn-success btn-sm">Visualizar</td>
+                    
+                     
+                    
+                </tr>
+                
+               
+                {% endfor %}
+                <tr>
+       
+                </tr>
+            </tbody>
+        </table>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}
