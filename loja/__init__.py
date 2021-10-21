@@ -7,7 +7,6 @@ from flask_login import LoginManager, login_manager
 from flask_migrate import Migrate
 
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
@@ -15,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///minhaloja.db'
 app.config['SECRET_KEY'] = 'akldjad'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+
 
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir,'static/images')
 
@@ -34,6 +34,9 @@ login_manager.login_message= u"Faça o login primeiro!"
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app) 
+
+
+
 
 
 from loja.admin import rotas
