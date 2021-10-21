@@ -63,7 +63,7 @@ def clienteLogin():
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         flash('Informações incorretas!', 'danger')
-        return redirect(url_for(clienteLogin))
+        return redirect(url_for('clienteLogin'))
 
     return render_template('cliente/login.html', form = form)
 
