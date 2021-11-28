@@ -1,17 +1,17 @@
 {% extends "layouts.html" %}
 {% block content%}
 
-{% from "_formhelpers.html" import render_field %}
+<div class="row d-flex justify-content-center">
+    <div class="col-xs-1 center-block">
+	<aside class="col-sm-4">
+        {% from "_formhelpers.html" import render_field %}
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <h1 class="bg-success text-center">Cadastrar Cliente</h1>
-        </div>
-        <div class="col-md-2"></div>
-    </div>
-    <form method=post>
+  
+<div class="card" style="width: 50rem;">
+<article class="card-body">
+	<h4 class="card-title text-center mb-4 mt-1">Cadastrar</h4>
+	<hr>
+	<form method=post>
         {{ form.csrf_token }}
         <div class="row">
             <div class="col-md-2"></div>
@@ -30,11 +30,13 @@
                 {{render_field(form.adress, class="form-control")}}
                 {{render_field(form.zipcode, class="form-control")}}
                 {{form.submit(class="btn btn-sm btn-success float-right")}}
-                
             </div>
-            <div class="col-md-2"></div>
         </div>
-    </form>
-</div>
+	</div> 
+	</form>
+</article>
 
+
+	</aside> 
+</div>
 {% endblock content%}

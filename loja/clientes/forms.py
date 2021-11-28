@@ -7,8 +7,8 @@ from .model import Cadastrar
 class CadastroClienteForm(FlaskForm):
     name = StringField('Nome :')
     username = StringField('Usuário :', [validators.DataRequired()])
-    email = StringField('Email :', [validators.DataRequired()])
-    password = PasswordField('Senha : ',[validators.DataRequired(),validators.EqualTo('confirm', message='As senhas devem ser iguais!')])
+    email = StringField('Email :', [validators.DataRequired()],  render_kw={"placeholder": "Email"})
+    password = PasswordField('Senha : ',[validators.DataRequired(),validators.EqualTo('confirm', message='As senhas devem ser iguais!')],  render_kw={"placeholder": "Senha"})
     confirm = PasswordField('Repetir Senha: ', [validators.DataRequired()])
     country = StringField('País: ', [validators.DataRequired()])
     state = StringField('Estado: ', [validators.DataRequired()])
@@ -16,7 +16,7 @@ class CadastroClienteForm(FlaskForm):
     contact = StringField('Telefone: ', [validators.DataRequired()])
     adress = StringField('Endereço: ', [validators.DataRequired()])
     zipcode = StringField('CEP: ', [validators.DataRequired()]) 
-    profile = FileField('Perfil', validators=[FileAllowed(['jpg','png','gif', 'jpeg'])])
+    profile = FileField('Perfil', validators=[FileAllowed(['jpg','png','jpeg'])])
 
     submit = SubmitField('Cadastrar')
 

@@ -37,6 +37,15 @@ def pagamento():
 def obrigado():
     return render_template('cliente/obrigado.html')
 
+@app.route('/faq')
+def faq():
+    return render_template('cliente/faq.html')
+
+@app.route('/como-usar')
+def comousar():
+    return render_template('cliente/como_usar.html')
+
+
 @app.route('/cliente/cadastrar', methods=['GET', 'POST']) 
 def cadastrar_clientes():
     form = CadastroClienteForm(request.form)
@@ -63,7 +72,7 @@ def clienteLogin():
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         flash('Informações incorretas!', 'danger')
-        return redirect(url_for('clienteLogin'))
+        return redirect(url_for("clienteLogin"))
 
     return render_template('cliente/login.html', form = form)
 

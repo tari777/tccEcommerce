@@ -8,7 +8,7 @@
         <div class="col-md-6">
             {% include "_messages.html" %}
             {% if marcas %}
-            <h2 class="text-center mt-5">Cadastrar Marcas</h2>
+            <h2 class="text-center mt-3">Cadastrar Marcas</h2>
             <form action="" method="POST">
                 <input type="text" name="marca" class="form-control">
                 <div class="text-center">
@@ -18,10 +18,11 @@
 
             </form>
             {% else %}
-            <h2 class="text-center mt-5">Cadastrar Fornecedor</h2>
+            <h2 class="text-center mt-3">Cadastrar Fornecedor</h2>
             <form action="" method="POST">
-                <input type="text" name="fornecedor" class="form-control">
-                <input type="text" name="endereco" class="form-control">  
+                <br>
+                <input type="text" name="fornecedor" class="form-control" placeholder="Nome">
+                <input type="text" name="endereco" class="form-control mt-3" placeholder="Endereço">  
 
                 <!-- -->
                 <div class="text-center">

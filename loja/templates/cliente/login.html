@@ -1,28 +1,35 @@
 {% extends "layouts.html" %}
 
 {% block content %}
-<div class="container"></div>
-    {% from "_formhelpers.html" import render_field %}
-    <div class="row">
-        <div class="col-md-4"></div>   
-        <div class="col-md-4">
-    <div class="text-center h1 "> Pagina de Login</div>
-    
+
     {% include '_messages.html' %}
+<br>
+<br>
+<br>
+<div class="row d-flex justify-content-center">
 
-    <form method="post" enctype="multipart/form-data">
-        <div>
-            {{ render_field(form.email, class="form-control") }}
-            {{ render_field(form.password, class="form-control") }}
-        </div>
+	<aside class="col-sm-4">
+        {% from "_formhelpers.html" import render_field %}
+<div class="card">
+<article class="card-body">
+	<h4 class="card-title text-center mb-4 mt-1">Entrar</h4>
+	<hr>
+	<form method="post" enctype="multipart/form-data">
+		{{ render_field(form.email, class="form-control") }}
+        {{ render_field(form.password, class="form-control") }}
+	<div class="form-group">
+        <div class="row d-flex justify-content-center">
+            <p><input type="submit" value="Logar" class="btn btn-success mt-5"></p>
+            <buto></buto>
+	</div> <!-- form-group// -->
 
-        <div class="text-center">
-        <p><input type="submit" value="Logar" class="btn btn-success mt-2"></p>
-        </div>
-    </form>
-    <div class="col-md-4"></div>
-</div>
-</div>
+	</form>
+</article>
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+
+<!--container end.//-->
 
 
 {% endblock content %}

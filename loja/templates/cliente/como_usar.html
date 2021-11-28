@@ -1,0 +1,22 @@
+{% extends 'layouts.html' %}
+
+{% block content %}
+
+
+{% include 'navbar.html' %}
+
+<div class="container text-center mt-4">
+    <h4 class="text-center">Como Usar</h4>
+    <p class="text-center">Primeiro é preciso fazer o Download de todos os arquivos necessários. </p>
+    <p class="text-center">DigiKeyBoardPtBr: <a href="https://drive.google.com/drive/folders/165rUMvl-Gm39YPprWw8AxwK0vhkMVq3f?usp=sharing">Download</a> </p>
+    <p class="text-center">Arduino Reverse Shell: <a href="https://drive.google.com/drive/folders/1X89hO2chzFPnPaD7NIoSju6W7pLkET4O?usp=sharing">Download</a> </p>
+    <h4 class="text-center">DigiKeyBoard</h4>
+    <p class="text-center">O DigiKeyBoardPtBr é uma biblioteca que vamos utilizar para "traduzir" a linguagem de inserção das teclas para português dentro do Arduino, após fazer o download da pasta é necessário coloca-lá no seguinte Diretório:  </p>
+    <p class="text-center">C:\Users\mathe\Documents\Arduino\libraries</p>
+    <h4 class="text-center">Arduino Reverse Shell</h4>
+    <p class="text-center">Esse script será utilizado para gerar o código que iremos utilizar para conseguir acesso através de uma conexão reversa. </p>
+    <p class="text-center">O passo a passo de como utiliza-lo está no vídeo abaixo, algumas alterações como o IP da sua máquina são necessárias.</p> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ulgXv44Qh-I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+</div>
+{% endblock content %}
